@@ -1,5 +1,7 @@
 This is a small and silly project to see how a bunch of Japanese kanji (Chinese characters) look when composited on top of each other. For no other reason than curiosity.
 
+This uses JSTalk to script the excellent mac image editor Acorn. http://flyingmeat.com/acorn/
+
 The action happens in the Composited kanji layers.jstalk file.
 
 jlpt_kanji_1-2230_1kx1k_darken.png is an example of all the JLPT kanji composited on top of each other using the darken layer blending on a 1000x1000 canvas.
