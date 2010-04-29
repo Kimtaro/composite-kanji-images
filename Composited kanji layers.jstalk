@@ -1,0 +1,43 @@
+// This code is mostly taken from http://blog.roguesheep.com/2010/03/27/acorn-and-jstalk/
+// With some help from http://flyingmeat.com/acorn/docs-2.0/example%20applescript%20and%20jstalk%20scripts.html
+
+// Put this file in ~/Library/Application Suppor/Acorn/Plug-Ins/
+// Then run from the Filter menu
+
+function main(image) {
+  // There seems to be a lower limit on how transparent text can be before turning 100% transparent at around 0.002
+  // So I'm manually doing this 500 kanji at a time. I'm sure the entire process could be scripted.
+  // Take kanji from the kanji.js file
+  var characters = ['安','一','飲','右','雨','駅','円','下','何','火','花','会','外','学','間','気','休','魚','金','九','空','月','見','言','古','五','午','後','語','口','校','行','高','国','今','左','三','山','四','子','時','耳','七','社','車','手','週','十','出','書','女','小','少','上','食','新','人','水','生','西','先','千','川','前','足','多','大','男','中','長','天','店','電','土','東','道','読','南','二','日','入','年','買','白','八','半','百','父','分','聞','母','北','本','毎','万','名','木','目','友','来',
+  '立','六','話'];
+  
+  var doc  = [[[NSApplication sharedApplication] orderedDocuments] objectAtIndex:0];
+  var wc   = doc.windowController();
+  var size = doc.canvasSize();
+
+  for ( i in characters ) {
+    var shapeLayer = [wc addNewShapeLayer:nil];
+    shapeLayer.setBlendMode('multiply'); // Possible values: pass through, color blend, color burn, color dodge, darken, destination atop, destination out, destination over, destination in, exclusion, hard light, hue, lighten, luminosity, multiply, normal, overlay, plus darker, plus lighter, saturation, screen, soft light, source atop, source in, source out, xor
+      
+    var textArea = [shapeLayer addTextWithBounds:NSMakeRect(0, 0, size.width, size.height)];
+    var text     = [[NSMutableAttributedString alloc]
+                      initWithString:characters[i]];
+    var font     = [NSFont fontWithName:@"Hiragino Kaku Gothic Pro W3" size:size.height];
+    var color    = [NSColor colorWithCalibratedRed:0 green:0 blue:0 alpha:1.0/characters.length];
+    var style    = [[NSMutableParagraphStyle defaultParagraphStyle]
+                       mutableCopyWithZone:NSDefaultMallocZone];
+
+    style.setAlignment(NSCenterTextAlignment);
+
+    var attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                        font, NSFontAttributeName,
+                        color, NSForegroundColorAttributeName,
+                        style, NSParagraphStyleAttributeName,
+                        nil ];
+
+    [text setAttributes:attributes
+          range:NSMakeRange(0,[text length])];
+
+    [textArea setContents:text];
+  }
+}
